@@ -1,12 +1,12 @@
 <template>
     <div class="ratingselect">
         <div class="rating-type">
-            <span :class="{'active':selectType===2}">{{des.all}}<b class="count">47</b></span>
-            <span :class="{'active':selectType===1}">{{des.positive}}<b class="count">47</b></span>
-            <span :class="{'active':selectType===0}">{{des.negative}}<b class="count">47</b></span>
+            <span @click="select(2,$event)" :class="{'active':selectType===2}">{{des.all}}<b class="count">47</b></span>
+            <span @click="select(1,$event)" :class="{'active':selectType===1}">{{des.positive}}<b class="count">47</b></span>
+            <span @click="select(0,$event)" :class="{'active':selectType===0}">{{des.negative}}<b class="count">47</b></span>
         </div>
         <div class="switch">
-            <span class="select-look">√</span>
+            <span class="select-look" :class="{'on':onlyContent===true}">√</span>
             <span>只查看有内容的评价</span>
         </div>
         <div class="ratings-content">
@@ -15,6 +15,7 @@
     </div>
 </template>
 <script type="text/javascript">
+import Vue from "vue";
 var POSITIVE = 0;
 var NEGATIVE = 1;
 var ALL = 2;
@@ -47,6 +48,15 @@ var ALL = 2;
         },
         created () {
             console.log(this.selectType)  
+        },
+        methods:{
+            select (type,event) {
+                if(!event._constructed){
+                    return;
+                }
+                this.selectType = type;
+                this.$emit("ratingselect.select",type);
+            }
         }
     }
 </script>
@@ -66,8 +76,8 @@ var ALL = 2;
             }
           }
           span:nth-child(1){
-            background:rgb(0,160,220);
-            color:#fff;
+            background:rgba(0,160,220,0.2);
+            color:rgb(77,85,93);
             &.active{
                 background:rgb(0,160,220);
                 color:#fff;
@@ -97,6 +107,9 @@ var ALL = 2;
                 border-radius:50%;
                 background:#ccc;
                 color:#fff;
+                &.on{
+                    background:#00c850;
+                }
             }
         }
     }

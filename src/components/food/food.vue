@@ -46,8 +46,8 @@ var ALL = 2;
         data () {
             return {
                 pershow:false,
-                selectType:ALL,
-                onlyContent:true,
+                selectType:POSITIVE,
+                onlyContent:false,
                 des:{
                     all:"全部",
                     positive:"推荐",
