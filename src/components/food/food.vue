@@ -5,7 +5,7 @@
                 <div class="image-header">
                     <img :src="food.image"/>
                     <div class="back" @click="hide">
-                        返回
+                        返回BBBBBBBBBB
                     </div> 
                 </div>
                 <div class="food-inform">
