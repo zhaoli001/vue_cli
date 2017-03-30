@@ -45,7 +45,7 @@ var ALL = 2;
                     };
                 }
             }
-        },
+        }
         created () {
             console.log(this.selectType)  
         },
