@@ -1,16 +1,13 @@
 <template>
     <div class="ratingselect">
         <div class="rating-type">
-            <span @click="select(2,$event)" :class="{'active':selectType===2}">{{des.all}}<b class="count">47</b></span>
-            <span @click="select(1,$event)" :class="{'active':selectType===1}">{{des.positive}}<b class="count">47</b></span>
-            <span @click="select(0,$event)" :class="{'active':selectType===0}">{{des.negative}}<b class="count">47</b></span>
+            <span @click="select(2,$event)" :class="{'active':selectTypeNum===2}">{{des.all}}<b class="count">{{ratings.length}}</b></span>
+            <span @click="select(0,$event)" :class="{'active':selectTypeNum===0}">{{des.positive}}<b class="count">{{positives.length}}</b></span>
+            <span @click="select(1,$event)" :class="{'active':selectTypeNum===1}">{{des.negative}}<b class="count">{{negatives.length}}</b></span>
         </div>
         <div class="switch">
-            <span class="select-look" :class="{'on':onlyContent===true}">√</span>
+            <span @click="toggleContent($event)" class="select-look" :class="{'on':onlyContentNum}">√</span>
             <span>只查看有内容的评价</span>
-        </div>
-        <div class="ratings-content">
-            
         </div>
     </div>
 </template>
@@ -45,17 +42,40 @@ var ALL = 2;
                     };
                 }
             }
-        }
-        created () {
-            console.log(this.selectType)  
+        },
+        data () {
+           return {
+            selectTypeNum: this.selectType,
+            onlyContentNum:this.onlyContent
+           } 
+        },
+        computed:{
+            positives () {
+                return this.ratings.filter(function(rating){
+                    return rating.rateType === POSITIVE;
+                })
+            },
+            negatives () {
+                return this.ratings.filter(function(rating) {
+                    return rating.rateType === NEGATIVE;
+                });
+            }
         },
         methods:{
             select (type,event) {
                 if(!event._constructed){
                     return;
                 }
-                this.selectType = type;
-                this.$emit("ratingselect.select",type);
+                this.selectTypeNum = type;
+                this.$emit("ratingselect-select",type);
+            },
+            toggleContent (event) {
+                if(!event._constructed){
+                    return;
+                }
+                this.onlyContentNum = !this.onlyContentNum;
+                this.$emit("ratingselect-content",this.onlyContentNum);
+
             }
         }
     }

@@ -7,13 +7,15 @@
               <router-link to="/goods">商品</router-link>
          </span>
          <span>
-              <router-link to="/seller">评价</router-link>
+              <router-link to="/ratings">评价</router-link>
          </span>
          <span>
-            <router-link to="/satings">商家</router-link>
+            <router-link to="/seller">商家</router-link>
          </span>
      </div>
-     <router-view class="view"></router-view>
+     <keep-alive>
+      <router-view class="view" keep-alive></router-view>
+     </keep-alive>
    </div>
   </div>
 </template>

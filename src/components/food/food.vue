@@ -5,7 +5,7 @@
                 <div class="image-header">
                     <img :src="food.image"/>
                     <div class="back" @click="hide">
-                        返回BBBBBBBBBB
+                        返回
                     </div> 
                 </div>
                 <div class="food-inform">
@@ -26,7 +26,22 @@
                 <div class="qq"></div>
                 <div class="evaluate">
                     <h2>商品评价</h2>
-                    <v-rating :selectType="selectType" :onlyContent="onlyContent" :des="des" :ratings="food.ratings"></v-rating>
+                    <v-rating :selectType="selectType" :onlyContent="onlyContent" :des="des" :ratings="food.ratings"  v-on:ratingselect-select="ratingselectSelect" v-on:ratingselect-content="ratingselectContent"></v-rating>
+                    <div class="ratingsWrapper">
+                        <ul v-show="food.ratings">
+                            <li  v-for="ratings in food.ratings" v-show="needShow(ratings.rateType,ratings.text)" class="ratingList">
+                                <div class="ratings-content">
+                                    <p class="ratingTime">{{ratings.rateTime | fomatDate}}</p>
+                                    <p class="ratingText"><span :class="{'on':ratings.rateType===0,'on':ratings.rateType===1}"></span>{{ratings.text}}</p>
+                                </div>
+                                <div class="ratings-image">
+                                    <span>{{ratings.username}}</span>
+                                    <img :src="ratings.avatar" alt=""/>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="noratings" v-show="!food.ratings || food.ratings.length===0">暂无评论</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,6 +50,7 @@
 <script type="text/javascript">
 import BScroll from 'better-scroll';
 import Vue from "vue";
+import {fomatDateFn} from "common/js/date.js";
 import contrulor from "components/contrulor/contrulo";
 import ratings from "components/ratingselect/ratingselect";
 
@@ -46,7 +62,7 @@ var ALL = 2;
         data () {
             return {
                 pershow:false,
-                selectType:POSITIVE,
+                selectType:ALL,
                 onlyContent:false,
                 des:{
                     all:"全部",
@@ -61,13 +77,13 @@ var ALL = 2;
             }
         },
         computed:{
-
+            
         },
         methods:{
             show () {
-                this.pershow = true;
+                this.pershow = false;
                 this.selectType = ALL;
-                this.onlyContent = true;
+                this.onlyContent = false;
                 if(this.food!=undefined){
                    this.pershow = true;
                    this.$nextTick(function(){
@@ -88,9 +104,39 @@ var ALL = 2;
                 if(!event._constructed){
                     return;
                 }
+                this.$emit("cart.add",event.target);
                 Vue.set(this.food,"count",1);
+            },
+            needShow (type,text){
+                if(this.onlyContent && !text){
+                    return false;
+                }
+
+                if(this.selectType === ALL){
+                    return true;
+                }else{
+                    return type === this.selectType;
+                }
+            },
+            ratingselectSelect (type){
+                this.selectType = type;
+                this.$nextTick(function(){
+                    this.scroll.refresh();
+                })
+            },
+            ratingselectContent (onlyContent) {
+                this.onlyContent = onlyContent;
+                this.$nextTick(function(){
+                    this.scroll.refresh();
+                })
             }
         },
+        filters:{
+            fomatDate (time) {
+                var date = new Date(time);
+                return fomatDateFn(date);
+            }
+        }, 
         components :{
             'v-con':contrulor,
             'v-rating':ratings
@@ -219,6 +265,58 @@ var ALL = 2;
             border-top:1px solid rgba(7,17,27,0.1);
             border-bottom:1px solid rgba(7,17,27,0.1);
             background:#f3f5f7;
+        }
+    }
+    .ratingsWrapper{
+        .ratingList{
+            border-bottom:1px solid #ccc;
+            padding:16px 0;
+            position:relative;
+            .ratings-image{
+                position:absolute;
+                right:0;
+                top:16px;
+                span{
+                    display:inline-block;
+                }
+                img{
+                  float:right;
+                  width:12px;
+                  height:12px;
+                  margin-left:6px; 
+                  border-radius:50%;
+                  overflow:hidden; 
+                }
+                
+            }
+            .ratings-content{
+                .ratingTime{
+                    font-size:10px;
+                    color:rgb(147,153,159);
+                    line-height:12px;
+                }
+                .ratingText{
+                    span{
+                        display:inline-block;
+                        width:15px;
+                        height:15px;
+                        border-radius:50%;
+                        background:rgb(147,153,159);
+                        margin-right:5px;
+                        &.on{
+                            background:rgb(0,160,220);
+                        }
+                    }
+                    font-size:12px;
+                    color:rgb(7,17,27);
+                    line-height:16px;
+                }
+            }
+        }
+        .noratings{
+            padding:10px;
+            line-height:23px;
+            color:rgb(147,153,159);
         }
     }
 </style>
