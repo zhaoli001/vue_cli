@@ -5,8 +5,8 @@
                 <div class="image-header">
                     <img :src="food.image"/>
                     <div class="back" @click="hide">
-                        返回
-                    </div> 
+                        返回ppppp
+                    </div>
                 </div>
                 <div class="food-inform">
                     <h1>{{food.name}}</h1>
@@ -77,7 +77,7 @@ var ALL = 2;
             }
         },
         computed:{
-            
+
         },
         methods:{
             show () {
@@ -136,7 +136,7 @@ var ALL = 2;
                 var date = new Date(time);
                 return fomatDateFn(date);
             }
-        }, 
+        },
         components :{
             'v-con':contrulor,
             'v-rating':ratings
@@ -144,7 +144,7 @@ var ALL = 2;
     }
 </script>
 <style type="text/css" lang="scss">
-   
+
     .particulars{
         width: 100%;
         position:fixed;
@@ -283,11 +283,11 @@ var ALL = 2;
                   float:right;
                   width:12px;
                   height:12px;
-                  margin-left:6px; 
+                  margin-left:6px;
                   border-radius:50%;
-                  overflow:hidden; 
+                  overflow:hidden;
                 }
-                
+
             }
             .ratings-content{
                 .ratingTime{
